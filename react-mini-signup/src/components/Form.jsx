@@ -1,19 +1,33 @@
-import { useState } from 'react'
-import Forminput from './Forminput'
-const initialErrorData = {
-  id: '',
-  pw: '',
-  confirmPw: '',
-}
-function Form({ modalRef }) {
-  const [errorData, setErrorData] = useState(initialErrorData)
+import { useRef, useEffect, useCallback } from 'react'
+import FormInput from './FormInput'
+import Modal from './Modal'
+import { useForm } from 'react-hook-form'
 
-  const handlerSubmit = (e) => {
-    e.preventDefault()
-    //모든 input이 유효하면(errorData값이 모두 true이면)
-    const isValid = Object.values(errorData).every((value) => value === true)
-    isValid && modalRef.current.showModal()
-  }
+const ID_REGEX = new RegExp('^[a-z0-9_-]{5,20}$')
+const PW_REGEX = new RegExp('^[a-zA-Z0-9]{8,16}$')
+
+const ERROR_MSG = {
+  required: '필수 정보입니다.',
+  invalidId: '5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.',
+  invalidPw: '8~16자 영문 대 소문자, 숫자를 사용하세요.',
+  invalidConfirmPw: '비밀번호가 일치하지 않습니다.',
+}
+
+const Form = () => {
+  const { register, handleSubmit, setFocus, getValues, formState, trigger } =
+    useForm({
+      mode: 'onBlur',
+    })
+
+  const modalRef = useRef(null)
+
+  const onSubmit = useCallback(() => {
+    modalRef.current.showModal()
+  }, [])
+
+  useEffect(() => {
+    setFocus('id')
+  }, [])
 
   return (
     <>
@@ -21,39 +35,58 @@ function Form({ modalRef }) {
         id="form"
         className="w-full max-w-md m-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
         autoComplete="off"
-        onSubmit={handlerSubmit}
+        onSubmit={handleSubmit(onSubmit)}
       >
-        <Forminput
+        <FormInput
           id={'id'}
           label={'아이디'}
-          errorData={errorData}
-          setErrorData={setErrorData}
+          errorMsg={formState.errors['id']?.message}
           inputProps={{
             type: 'text',
-            placeholder: '아이디를 입력해주세요',
-            autoComplete: 'off',
+            placeholder: '아이디를 입력해주세요.',
+            ...register('id', {
+              pattern: {
+                value: ID_REGEX,
+                message: ERROR_MSG.invalidId,
+              },
+              required: ERROR_MSG.required,
+            }),
           }}
+          trigger={trigger}
         />
-        <Forminput
+        <FormInput
           id={'pw'}
           label={'비밀번호'}
-          errorData={errorData}
-          setErrorData={setErrorData}
+          errorMsg={formState.errors['pw']?.message}
           inputProps={{
             type: 'password',
             placeholder: '비밀번호를 입력해주세요',
             autoComplete: 'off',
+            ...register('pw', {
+              pattern: {
+                value: PW_REGEX,
+                message: ERROR_MSG.invalidPw,
+              },
+              required: ERROR_MSG.required,
+              onBlur: () => trigger('confirmPw'),
+            }),
           }}
         />
-        <Forminput
+        <FormInput
           id={'confirmPw'}
           label={'비밀번호 확인'}
-          errorData={errorData}
-          setErrorData={setErrorData}
+          errorMsg={formState.errors['confirmPw']?.message}
           inputProps={{
             type: 'password',
-            placeholder: '비밀번호 확인을 입력해주세요',
+            placeholder: '비밀번호 확인을 입력해주세요.',
             autoComplete: 'off',
+            ...register('confirmPw', {
+              validate: {
+                sameWithPw: (v) =>
+                  v === getValues('pw') || ERROR_MSG.invalidConfirmPw,
+              },
+              required: ERROR_MSG.required,
+            }),
           }}
         />
         <div className="flex items-center justify-center">
@@ -65,6 +98,7 @@ function Form({ modalRef }) {
           />
         </div>
       </form>
+      <Modal ref={modalRef} getValues={getValues} />
     </>
   )
 }

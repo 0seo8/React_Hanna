@@ -1,8 +1,6 @@
-import React, { forwardRef, useContext } from 'react'
-import { FormContext } from '../App'
+import { forwardRef } from 'react'
 
-const Modal = forwardRef((props, ref) => {
-  const { formData } = useContext(FormContext)
+const Modal = forwardRef(({ getValues }, ref) => {
   const handleClick = (type) => {
     ref.current.close()
     type === 'approve' && window.alert('가입되었습니다')
@@ -18,13 +16,13 @@ const Modal = forwardRef((props, ref) => {
             <div className="mt-2">
               아이디
               <p id="confirm-id" className="text-sm text-blue-500 bold">
-                {formData.id}
+                {getValues().id}
               </p>
             </div>
             <div className="mt-2">
               비밀번호
               <p id="confirm-pw" className="text-sm text-blue-500 bold">
-                {formData.pw}
+                {getValues().pw}
               </p>
             </div>
           </div>
