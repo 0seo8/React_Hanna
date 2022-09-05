@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useState, useRef } from 'react'
 import './App.css'
 import Form from './components/Form'
 import FrontControlBox from './components/FrontControlBox'
@@ -17,14 +17,16 @@ export const FormContext = createContext({
 
 function App() {
   const [formData, setFormData] = useState(initialFormData)
+  const modalRef = useRef()
   return (
     <FormContext.Provider value={{ formData, setFormData }}>
       <section className="form-wrapper">
-        <Form />
+        <Form modalRef={modalRef} />
         <Footer />
       </section>
       <FrontControlBox />
-      <Modal />
+      {/* 모달에 ref를 만들어 form에게 제어권을 넘겨줍니다 */}
+      <Modal ref={modalRef} />
     </FormContext.Provider>
   )
 }

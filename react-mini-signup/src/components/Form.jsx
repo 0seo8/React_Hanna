@@ -5,14 +5,23 @@ const initialErrorData = {
   pw: '',
   confirmPw: '',
 }
-function Form() {
+function Form({ modalRef }) {
   const [errorData, setErrorData] = useState(initialErrorData)
+
+  const handlerSubmit = (e) => {
+    e.preventDefault()
+    //모든 input이 유효하면(errorData값이 모두 true이면)
+    const isValid = Object.values(errorData).every((value) => value === true)
+    isValid && modalRef.current.showModal()
+  }
 
   return (
     <>
       <form
         id="form"
         className="w-full max-w-md m-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        autoComplete="off"
+        onSubmit={handlerSubmit}
       >
         <Forminput
           id={'id'}
