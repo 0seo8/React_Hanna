@@ -11,7 +11,7 @@ function App() {
   const [cartItems, setCartItems] = useState([])
   const [isCartOpen, setIsCartOpen] = useState(false)
 
-  const toggelCart = () => {
+  const toggleCart = () => {
     setIsCartOpen((prev) => !prev)
   }
 
@@ -31,7 +31,7 @@ function App() {
           <button
             id="open-cart-btn"
             className="fill-gray-400 hover:fill-gray-500"
-            onClick={toggelCart}
+            onClick={toggleCart}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -51,12 +51,17 @@ function App() {
             {productItems.length === 0 ? (
               <h1>상품이 없습니다.</h1>
             ) : (
-              <ProductList productItems={productItems} />
+              <ProductList
+                productItems={productItems}
+                toggleCart={toggleCart}
+                cartItems={cartItems}
+                setCartItems={setCartItems}
+              />
             )}
           </div>
         </section>
       </div>
-      {isCartOpen && <BackDrop onClick={toggelCart} />}
+      {isCartOpen && <BackDrop onClick={toggleCart} />}
       <aside className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
         {/* 장바구니의 가시성은 아래 div의 (id="shopping-cart") class명으로 제어합니다. 
           translate-x-full: 장바구니 닫힘 translate-x-0: 장바구니 열림 */}
@@ -77,7 +82,7 @@ function App() {
                   >
                     <svg
                       id="close-cart-btn"
-                      onClick={toggelCart}
+                      onClick={toggleCart}
                       className="h-6 w-6"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
