@@ -19,6 +19,10 @@ function App() {
   const [query, setQuery] = useState('')
   const [order, setOrder] = useState('popular')
   const [orientation, setOrientation] = useState('all')
+  const [page, setPage] = useState(1)
+  const [perPage, setPerPage] = useState(20)
+
+  const numOfPages = data.totalHits ? Math.ceil(data.totalHits / perPage) : 0
 
   useEffect(() => {
     const fetch = async () => {
@@ -26,12 +30,14 @@ function App() {
         q: query,
         orientation,
         order,
+        page,
+        per_page: perPage,
       })
       setData(data)
     }
     fetch()
     //query가 업데이트 될 때 마다 fetch가 될 수 있도록 설정
-  }, [query, orientation, order])
+  }, [query, orientation, order, page, perPage])
 
   return (
     <>
@@ -40,8 +46,14 @@ function App() {
           setQuery={setQuery}
           setOrder={setOrder}
           setOrientation={setOrientation}
+          setPerPage={setPerPage}
         />
-        <ResultContainer data={data} />
+        <ResultContainer
+          data={data}
+          page={page}
+          setPage={setPage}
+          numOfPages={numOfPages}
+        />
         <Footer />
         <ToggleThemeButton />
       </Container>
