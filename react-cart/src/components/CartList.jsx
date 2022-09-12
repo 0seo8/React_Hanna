@@ -1,10 +1,36 @@
 import React from 'react'
 
-const CartList = ({ cartItems }) => {
+const MAX_COUNT = 10
+const MIN_COUNT = 11
+
+const CartList = ({ cartItems, setCartItems }) => {
+  const increaseCartItem = (idx) => {
+    if (cartItems[idx].count < MAX_COUNT) {
+      const newCartItems = [...cartItems]
+      newCartItems[idx].count++
+      setCartItems(newCartItems)
+    } else {
+      alert('장바구니에 담을 수 있는 최대 수량은 10개입니다.')
+    }
+  }
+  const decreaseCartItem = (idx) => {
+    if (cartItems[idx].count > MIN_COUNT) {
+      const newCartItems = [...cartItems]
+      newCartItems[idx].count--
+      setCartItems(newCartItems)
+    } else {
+      alert('장바구니에 담을 수 있는 최소 수량은 1개입니다.')
+    }
+  }
+  const removeCartItem = (idx) => {
+    const newCartItems = [...cartItems]
+    newCartItems.splice(idx, 1)
+    setCartItems(newCartItems)
+  }
   return (
     <ul className="divide-y divide-gray-200">
-      {cartItems.map((id, name, imgSrc, price, count) => (
-        <li className="flex py-6" id="4" key={id}>
+      {cartItems.map(({ id, name, imgSrc, price, count }, idx) => (
+        <li className="flex py-6" key={id}>
           <div className="h-24 w-24 overflow-hidden rounded-md border border-gray-200">
             <img
               src={imgSrc}
@@ -21,15 +47,29 @@ const CartList = ({ cartItems }) => {
             </div>
             <div className="flex flex-1 items-end justify-between">
               <div className="flex text-gray-500">
-                <button className="decrease-btn">-</button>
+                <button
+                  className="decrease-btn"
+                  onClick={() => {
+                    decreaseCartItem(idx)
+                  }}
+                >
+                  -
+                </button>
                 <div className="mx-2 font-bold">{count}개</div>
-                <button className="increase-btn">+</button>
+                <button
+                  className="increase-btn"
+                  onClick={() => increaseCartItem(idx)}
+                >
+                  +
+                </button>
               </div>
               <button
                 type="button"
                 className="font-medium text-sky-400 hover:text-sky-500"
               >
-                <p className="remove-btn">삭제하기</p>
+                <p className="remove-btn" onClick={() => removeCartItem(idx)}>
+                  삭제하기
+                </p>
               </button>
             </div>
           </div>

@@ -3,22 +3,20 @@ import React from 'react'
 const ProductList = ({ productItems, toggleCart, cartItems, setCartItems }) => {
   const handleAddProduct = (idx) => {
     const currentProduct = productItems[idx]
-    const checkedIndx = cartItems.findIndex(
+    const checkedIdx = cartItems.findIndex(
       (item) => item.id === currentProduct.id,
     )
-    let newCartItems
-    //checkedIndx === -1 처음 담는 아이템
-    if (checkedIndx === -1) {
-      newCartItems = [...cartItems, { currentProduct, count: 1 }]
-      setCartItems(newCartItems)
+    if (checkedIdx === -1) {
+      setCartItems((prev) => {
+        return [...prev, { ...currentProduct, count: 1 }]
+      })
     } else {
-      //checkedIndex !== -1 중복 아이템
-      newCartItems = [...cartItems]
-      newCartItems[checkedIndx].count++
+      const newCartItems = [...cartItems]
+      newCartItems[idx].count += 1
+      setCartItems(newCartItems)
     }
     toggleCart()
   }
-
   return productItems.map(({ id, name, imgSrc, price }, idx) => (
     <article key={id} onClick={() => handleAddProduct(idx)}>
       <div className="rounded-lg overflow-hidden border-2 relative">

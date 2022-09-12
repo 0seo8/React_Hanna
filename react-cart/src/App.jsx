@@ -1,18 +1,28 @@
-import './App.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import getProductData from './api/getProductData'
 import CartList from './components/CartList'
 import ProductList from './components/ProductList'
 import BackDrop from './components/BackDrop'
-import { useEffect } from 'react'
-import getProductData from './api/getProductData'
 
 function App() {
+  const localCartState = localStorage.getItem('cartState')
+  const initialCartItems = localCartState
+    ? JSON.parse(localStorage.getItem('cartState'))
+    : []
   const [productItems, setProductItems] = useState([])
-  const [cartItems, setCartItems] = useState([])
+  const [cartItems, setCartItems] = useState(initialCartItems)
   const [isCartOpen, setIsCartOpen] = useState(false)
 
   const toggleCart = () => {
     setIsCartOpen((prev) => !prev)
+  }
+
+  const totalCount = cartItems
+    .reduce((acc, cur) => cur.price * cur.count + acc, 0)
+    .toLocaleString()
+
+  const saveToLocalStorage = () => {
+    localStorage.setItem('cartState', JSON.stringify(cartItems))
   }
 
   useEffect(() => {
@@ -95,20 +105,21 @@ function App() {
               </div>
               {/* 아래 하드코딩 되어있는 장바구니 목록들을 유저 상호작용에 맞게 렌더링 되도록 변경해주세요.  */}
               <div id="cart-list">
-                <CartList cartItems={cartItems} />
+                <CartList cartItems={cartItems} setCartItems={setCartItems} />
               </div>
             </div>
             <div className="border-t border-gray-200 p-6">
               <div className="flex justify-between font-medium">
                 <p>결제금액</p>
                 <p className="font-bold" id="total-count">
-                  0원
+                  {totalCount + '원'}
                 </p>
               </div>
               <a
                 id="payment-btn"
                 href="./"
                 className="flex items-center justify-center rounded-md border border-transparent bg-sky-400 px-6 py-3 mt-6 font-medium text-white shadow-sm hover:bg-sky-500"
+                onClick={saveToLocalStorage}
               >
                 결제하기
               </a>
