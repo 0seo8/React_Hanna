@@ -25,7 +25,7 @@ const ResultContainer = ({ data }) => {
     <Container>
       {/* ImgCard 클릭 시 해당 이미지의 정보로 ImageModal이 나타나야 합니다. */}
       {/* <ImageModal /> */}
-      <Pagination />
+      {data.hits?.length > 0 && <Pagination />}
       <ResultsWrapper>
         {data.hits?.length > 0 ? (
           data.hits?.map((imgData) => (
