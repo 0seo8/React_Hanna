@@ -36,17 +36,14 @@ const ResultContainer = ({ data, page, setPage, numOfPages }) => {
         <Pagination page={page} setPage={setPage} numOfPages={numOfPages} />
       )}
       <ResultsWrapper>
-        {data.hits?.length > 0 ? (
+        {data.hits?.length > 0 &&
           data.hits?.map((imgData) => (
             <ImageCard
               key={imgData.id}
               imgData={imgData}
               onClick={() => setCurrentImgDetail(imgData)}
             />
-          ))
-        ) : (
-          <EmptyResult />
-        )}
+          ))}
       </ResultsWrapper>
     </Container>
   )
