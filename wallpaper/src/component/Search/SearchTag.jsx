@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { ReactComponent as DeleteIcon } from '../assets/delete.svg'
+import { ReactComponent as DeleteIcon } from '../../assets/delete.svg'
 
 const Tag = styled.div`
   display: flex;

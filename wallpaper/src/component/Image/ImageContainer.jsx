@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import React, { useState, Suspense } from 'react'
 import ImageCard from './ImageCard'
-import Pagination from './Pagination'
+import Pagination from '../Pagination'
 
 const ImageModal = React.lazy(() => import('./ImageModal'))
 
@@ -19,7 +19,7 @@ const ResultsWrapper = styled.div`
   width: 100%;
 `
 
-const ResultContainer = ({ data, page, setPage, numOfPages }) => {
+const ImageContainer = ({ data, page, setPage, numOfPages }) => {
   const [currentImgDetail, setCurrentImgDetail] = useState(null)
   return (
     <Container>
@@ -48,4 +48,4 @@ const ResultContainer = ({ data, page, setPage, numOfPages }) => {
   )
 }
 
-export default ResultContainer
+export default ImageContainer

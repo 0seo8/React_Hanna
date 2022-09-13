@@ -2,13 +2,13 @@ import { useState, useEffect, useRef } from 'react'
 
 import styled from 'styled-components'
 import ToggleThemeButton from './component/ToggleThemeButton'
-import ResultContainer from './component/ResultContainer'
+import ImageContainer from './component/Image/ImageContainer'
 import Footer from './component/Footer'
 import getWallpapers from './api/getWallpapers'
 import Title from './component/Title'
 import './App.css'
 import EmptyResult from './component/EmptyResult'
-import Search from './component/Search'
+import Search from './component/Search/Search'
 
 const Container = styled.div`
   position: relative;
@@ -96,7 +96,7 @@ function App() {
             setPerPage={setPerPage}
           />
         </Header>
-        <ResultContainer
+        <ImageContainer
           data={data}
           page={page}
           setPage={setPage}
