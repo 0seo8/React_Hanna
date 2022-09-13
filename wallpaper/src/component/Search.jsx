@@ -53,6 +53,17 @@ const Search = ({ setQuery, setOrder, setOrientation, setPerPage }) => {
   const [searchTags, setSearchTags] = useState(initialSearchTags)
   const inputRef = useRef(null)
 
+  let debounceTimer
+
+  const debounce = (callback, time, e) => {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer)
+    }
+    debounceTimer = setTimeout(() => {
+      callback(e)
+    }, time)
+  }
+
   const updateSearchInput = (value) => {
     inputRef.current.value = value
   }
