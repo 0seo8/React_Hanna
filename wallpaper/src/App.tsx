@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
-
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import ToggleThemeButton from './component/ToggleThemeButton'
 import ImageContainer from './component/Image/ImageContainer'
@@ -9,6 +8,7 @@ import Title from './component/Title'
 import './App.css'
 import EmptyResult from './component/EmptyResult'
 import Search from './component/Search/Search'
+import { IHetWallPapersResponse, Order, Orientation } from './types'
 
 const Container = styled.div`
   position: relative;
@@ -29,10 +29,14 @@ const Header = styled.div`
 `
 
 function App() {
-  const [data, setData] = useState({ total: 0, totalHits: 0, hits: [] })
+  const [data, setData] = useState<IHetWallPapersResponse>({
+    total: 0,
+    totalHits: 0,
+    hits: [],
+  })
   const [query, setQuery] = useState('')
-  const [order, setOrder] = useState('popular')
-  const [orientation, setOrientation] = useState('all')
+  const [order, setOrder] = useState<Order>('popular')
+  const [orientation, setOrientation] = useState<Orientation>('all')
   const [page, setPage] = useState(1)
   const [perPage, setPerPage] = useState(20)
   const target = useRef(null)
@@ -45,8 +49,8 @@ function App() {
         q: query,
         orientation,
         order,
-        page,
-        per_page: perPage,
+        page: page.toString(),
+        per_page: perPage.toString(),
       })
       if (page === 1) {
         setData(data)
@@ -65,7 +69,7 @@ function App() {
 
   //2. 모두다 검색 시 로딩중X
 
-  const callback = ([entries]) => {
+  const callback: IntersectionObserverCallback = ([entries]) => {
     //보일 때만 console.log가 찍히는 걸 확인할 수 있습니다.
     if (entries.isIntersecting) {
       setPage((prev) => prev + 1)
