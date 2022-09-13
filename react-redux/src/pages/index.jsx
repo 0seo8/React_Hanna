@@ -1,7 +1,14 @@
-import React from "react";
+import React from 'react'
+import CocktailList from '../components/CocktailList'
+import SearchInput from '../components/SearchInput'
 
 const Home = () => {
-  return <h2>Home</h2>;
-};
+  return (
+    <div>
+      <SearchInput />
+      <CocktailList />
+    </div>
+  )
+}
 
-export default Home;
+export default Home
